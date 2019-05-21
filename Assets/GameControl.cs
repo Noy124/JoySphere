@@ -8,11 +8,14 @@ using UnityEngine.SceneManagement;
 public class GameControl : MonoBehaviour
 {
     public static GameControl instance;
-    public GameObject gameOverText, heart1, heart2, heart3;
+    public GameObject gameOverText, oneHeart, twoHearts, threeHearts, pauseText;
     public Text scoreText;
     public bool gameOver = false;
+    public bool pause = false;
     public static int health = 3;
     public float scrollSpeed = -1.5f;
+
+    private float defaultScrollSpeed;
 
     private int score = 0;
     // Start is called before the first frame update
@@ -27,13 +30,14 @@ public class GameControl : MonoBehaviour
             Destroy(gameObject);
         }
         health = 3;
+        defaultScrollSpeed = scrollSpeed;
     }
     
     // Update is called once per frame
     void Update()
     {
 
-        if (!gameOver)
+        if (!gameOver && !pause)
         {
             if (health > 3)
                 health = 3;
@@ -41,38 +45,56 @@ public class GameControl : MonoBehaviour
             switch (health)
             {
                 case 3:
-                    heart1.gameObject.SetActive(true);
-                    heart2.gameObject.SetActive(true);
-                    heart3.gameObject.SetActive(true);
+                    threeHearts.gameObject.SetActive(true);
+                    twoHearts.gameObject.SetActive(false);
+                    oneHeart.gameObject.SetActive(false);
                     break;
                 case 2:
-                    heart1.gameObject.SetActive(false);
-                    heart2.gameObject.SetActive(true);
-                    heart3.gameObject.SetActive(true);
+                    threeHearts.gameObject.SetActive(false);
+                    twoHearts.gameObject.SetActive(true);
+                    oneHeart.gameObject.SetActive(false);
                     break;
                 case 1:
-                    heart1.gameObject.SetActive(false);
-                    heart2.gameObject.SetActive(false);
-                    heart3.gameObject.SetActive(true);
+                    threeHearts.gameObject.SetActive(false);
+                    twoHearts.gameObject.SetActive(false);
+                    oneHeart.gameObject.SetActive(true);
                     break;
                 case 0:
-                    heart1.gameObject.SetActive(false);
-                    heart2.gameObject.SetActive(false);
-                    heart3.gameObject.SetActive(false);
+                    threeHearts.gameObject.SetActive(false);
+                    twoHearts.gameObject.SetActive(false);
+                    oneHeart.gameObject.SetActive(false);
                     EndOfGame();
                     break;
 
             }
+
+            if (Input.GetKey(KeyCode.P))
+            {
+                scrollSpeed = 0;
+                pause = true;
+                pauseText.SetActive(true);
+                //new WaitForSecondsRealtime(5);
+            }
         }
-        else
+        else if(gameOver)
         {
             scrollSpeed = 0;
             if (Input.GetKey("space"))
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            }else if (Input.GetKey("escape"))
+            }
+        }
+        else
+        {
+            scrollSpeed = 0;
+            if (Input.GetKey(KeyCode.C))
             {
-                SceneManager.LoadScene("Main Menu");
+                pauseText.SetActive(false);
+                scrollSpeed = defaultScrollSpeed;
+                pause = false;
+            }else if (Input.GetKey(KeyCode.E))
+            {
+                SceneManager.LoadScene(0);
             }
         }
 
@@ -84,12 +106,12 @@ public class GameControl : MonoBehaviour
         gameOver = true;
     }
 
-    public void Score()
+    public void Score(int amount=1)
     {
         if (gameOver)
             return;
 
-        score++;
+        score+=amount;
         scoreText.text = "Score: " + score.ToString();
     }
 }

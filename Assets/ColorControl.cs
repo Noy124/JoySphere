@@ -1,116 +1,206 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO.Ports;
 using UnityEngine;
 
 public class ColorControl : MonoBehaviour
 {
-    public enum color {white,red,blue,yellow,purple,orange,green,black};
+    public enum color {white,red,blue,yellow,purple,cyan,green,black};
     public static Color orange = new Color(1, 0.549f, 0);
 
     private color currentColor = color.white;
     private color nextColor = color.white;
     private SpriteRenderer sr;
+    private SerialPort sp;
+    bool gotNewColor = false;
+
+    private int counter = 0;
 
     // Start is called before the first frame update
     void Start()
     {
         sr = GetComponent<SpriteRenderer>();
+        sp = new SerialPort("COM7", 9600);
+        if (!sp.IsOpen)
+        {
+            sp.Open();
+            sp.ReadTimeout = 1;
+            sp.Handshake = Handshake.None;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        string data = null;
+        if (sp.IsOpen)
+        {
+            try
+            {
+                data = sp.ReadLine();
+            }
+            catch (System.TimeoutException e)
+            { }
+
+            sp.BaseStream.Flush();
+
+            string nextColorText;
+            if (data != null)
+            {
+
+                nextColorText = data.ToString();
+                Debug.Log(nextColorText);
+
+                if (nextColorText == "1" && currentColor != color.green)
+                {
+                    nextColor = color.green;
+                    gotNewColor = true;
+                    Debug.Log(data);
+                }
+                else if (nextColorText == "2" && currentColor != color.red)
+                {
+                    nextColor = color.red;
+                    gotNewColor = true;
+                    Debug.Log(data);
+                }
+                else if (nextColorText == "3" && currentColor != color.blue)
+                {
+                    nextColor = color.blue;
+                    gotNewColor = true;
+                    Debug.Log(data);
+                }
+                else if (nextColorText == "4" && currentColor != color.white)
+                {
+                    nextColor = color.white;
+                    gotNewColor = true;
+                    Debug.Log(data);
+                }
+                //    switch (nextColorText)
+                //  {
+                //    case "1": nextColor = color.yellow;
+                //      gotNewColor = true; break;
+                // case "2": nextColor = color.red;
+                //    gotNewColor = true; break;
+                // case "3": nextColor = color.blue;
+                //    gotNewColor = true; break;
+                // case "4": nextColor = color.white;
+                //    gotNewColor = true; break;
+
+                //}
+
+            }
+        }
+
         if (Input.GetKey("1"))
         {
-            nextColor = color.blue;
-        }else if (Input.GetKey("2"))
+           nextColor = color.blue;
+            gotNewColor = true;
+        }
+        else if (Input.GetKey("2"))
         {
-            nextColor = color.yellow;
-        }else if (Input.GetKey("3"))
+           nextColor = color.green;
+            gotNewColor = true;
+        }
+        else if (Input.GetKey("3"))
         {
-            nextColor = color.red;
-        }else if(Input.GetKey("4"))
+           nextColor = color.red;
+            gotNewColor = true;
+        }
+        else if(Input.GetKey("4"))
         {
-            nextColor = color.white;
+           nextColor = color.white;
+            gotNewColor = true;
         }
 
-        if(sr.color == Color.white)
+        if (gotNewColor && !GameControl.instance.gameOver && !GameControl.instance.pause)
         {
-            currentColor = nextColor;
-        }else if(sr.color == Color.blue){
-            switch (nextColor)
+            gotNewColor = false;
+            if (sr.color == Color.white)
             {
-                case color.yellow: currentColor = color.green;break;
-                case color.red: currentColor = color.purple;break;
-                case color.white: currentColor = color.white;break;
-                case color.blue: currentColor = color.blue;break;
+                currentColor = nextColor;
             }
-        }else if(sr.color == Color.red)
-        {
-            switch (nextColor)
+            else if (sr.color == Color.blue)
             {
-                case color.yellow: currentColor = color.orange; break;
-                case color.red: currentColor = color.red; break;
-                case color.white: currentColor = color.white; break;
-                case color.blue: currentColor = color.purple; break;
+                switch (nextColor)
+                {
+                    case color.green: currentColor = color.cyan; break;
+                    case color.red: currentColor = color.purple; break;
+                    case color.white: currentColor = color.white; break;
+                    case color.blue: currentColor = color.blue; break;
+                }
             }
-        }else if(sr.color == Color.yellow)
-        {
-            switch (nextColor)
+            else if (sr.color == Color.red)
             {
-                case color.yellow: currentColor = color.yellow; break;
-                case color.red: currentColor = color.orange; break;
-                case color.white: currentColor = color.white; break;
-                case color.blue: currentColor = color.green; break;
+                switch (nextColor)
+                {
+                    case color.green: currentColor = color.yellow; break;
+                    case color.red: currentColor = color.red; break;
+                    case color.white: currentColor = color.white; break;
+                    case color.blue: currentColor = color.purple; break;
+                }
             }
-        }else if(sr.color == Color.magenta)
-        {
-            switch (nextColor)
+            else if (sr.color == Color.green)
             {
-                case color.yellow: currentColor = color.black; break;
-                case color.red: currentColor = color.purple; break;
-                case color.white: currentColor = color.white; break;
-                case color.blue: currentColor = color.purple; break;
+                switch (nextColor)
+                {
+                    case color.green: currentColor = color.green; break;
+                    case color.red: currentColor = color.yellow; break;
+                    case color.white: currentColor = color.white; break;
+                    case color.blue: currentColor = color.cyan; break;
+                }
             }
-        }else if(sr.color == Color.green)
-        {
-            switch (nextColor)
+            else if (sr.color == Color.magenta)
             {
-                case color.yellow: currentColor = color.green; break;
-                case color.red: currentColor = color.black; break;
-                case color.white: currentColor = color.white; break;
-                case color.blue: currentColor = color.green; break;
+                switch (nextColor)
+                {
+                    case color.green: currentColor = color.black; break;
+                    case color.red: currentColor = color.purple; break;
+                    case color.white: currentColor = color.white; break;
+                    case color.blue: currentColor = color.purple; break;
+                }
             }
-        }else if(sr.color == Color.black)
-        {
-            switch (nextColor)
+            else if (sr.color == Color.yellow)
             {
-                case color.yellow: currentColor = color.black; break;
-                case color.red: currentColor = color.black; break;
-                case color.white: currentColor = color.white; break;
-                case color.blue: currentColor = color.black; break;
+                switch (nextColor)
+                {
+                    case color.green: currentColor = color.yellow; break;
+                    case color.red: currentColor = color.yellow; break;
+                    case color.white: currentColor = color.white; break;
+                    case color.blue: currentColor = color.black; break;
+                }
             }
-        }else if(sr.color == orange)
-        {
-            switch (nextColor)
+            else if (sr.color == Color.black)
             {
-                case color.yellow: currentColor = color.orange; break;
-                case color.red: currentColor = color.orange; break;
-                case color.white: currentColor = color.white; break;
-                case color.blue: currentColor = color.black; break;
+                switch (nextColor)
+                {
+                    case color.green: currentColor = color.black; break;
+                    case color.red: currentColor = color.black; break;
+                    case color.white: currentColor = color.white; break;
+                    case color.blue: currentColor = color.black; break;
+                }
             }
-        }
+            else if (sr.color == Color.cyan)
+            {
+                switch (nextColor)
+                {
+                    case color.green: currentColor = color.cyan; break;
+                    case color.red: currentColor = color.black; break;
+                    case color.white: currentColor = color.white; break;
+                    case color.blue: currentColor = color.cyan; break;
+                }
+            }
 
-        switch (currentColor)
-        {
-            case color.white: sr.color = Color.white;break;
-            case color.red: sr.color = Color.red; break;
-            case color.blue: sr.color = Color.blue; break;
-            case color.yellow: sr.color = Color.yellow; break;
-            case color.purple: sr.color = Color.magenta; break;
-            case color.green: sr.color = Color.green; break;
-            case color.black: sr.color = Color.black; break;
-            case color.orange: sr.color = orange; break;
+            switch (currentColor)
+            {
+                case color.white: sr.color = Color.white; SendCommand("0"); break;
+                case color.red: sr.color = Color.red; SendCommand("1");  break;
+                case color.blue: sr.color = Color.blue; SendCommand("2");  break;
+                case color.yellow: sr.color = Color.yellow; SendCommand("3");  break;
+                case color.purple: sr.color = Color.magenta; SendCommand("4");  break;
+                case color.green: sr.color = Color.green; SendCommand("5");  break;
+                case color.black: sr.color = Color.black; SendCommand("7"); break;
+                case color.cyan: sr.color = Color.cyan; SendCommand("6");  break;
+            }
         }
     }
 
@@ -118,5 +208,20 @@ public class ColorControl : MonoBehaviour
     {
         currentColor = color.white;
         nextColor = color.white;
+        sr.color = Color.white;
+        gotNewColor = false;
+        Debug.Log("RESET!!");
+    }
+
+    public void SendCommand(string cmd)
+    {
+        try
+        {
+            sp.WriteLine(cmd);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogWarning(e.ToString());
+        }
     }
 }

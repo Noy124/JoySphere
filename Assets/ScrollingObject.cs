@@ -23,10 +23,14 @@ public class ScrollingObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameControl.instance.gameOver)
+        if (GameControl.instance.gameOver || GameControl.instance.pause)
         {
             rb2d.velocity = new Vector2(0, 0);
 
+        }
+        else
+        {
+            rb2d.velocity = new Vector2(scrollSpeed, 0);
         }
 
     }
