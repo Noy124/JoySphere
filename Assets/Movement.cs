@@ -29,13 +29,13 @@ public class Movement : MonoBehaviour
         minMaxPos = camera.scaledPixelWidth/2;
 
 
-        sp = new SerialPort("COM4", 38400);
-        if (!sp.IsOpen)
-        {
-            sp.Open();
-            sp.ReadTimeout = 1;
-            sp.Handshake = Handshake.None;
-        }
+        //sp = new SerialPort("COM4", 38400);
+        //if (!sp.IsOpen)
+        //{
+        //    sp.Open();
+        //    sp.ReadTimeout = 1;
+        //    sp.Handshake = Handshake.None;
+        //}
 
     }
 
@@ -87,7 +87,11 @@ public class Movement : MonoBehaviour
         {
             rb.velocity = new Vector2(0, rb.velocity.y);
         }
-      
+        if (posCameraSpace.y <= 0 && rb.velocity.y < 0 || posCameraSpace.y >= 1 && rb.velocity.x > 0)
+        {
+            rb.velocity = new Vector2(rb.velocity.x,0);
+        }
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

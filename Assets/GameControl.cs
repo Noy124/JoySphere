@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.IO.Ports;
 
 public class GameControl : MonoBehaviour
 {
@@ -75,6 +76,8 @@ public class GameControl : MonoBehaviour
                 pauseText.SetActive(true);
                 //new WaitForSecondsRealtime(5);
             }
+
+            
         }
         else if(gameOver)
         {
@@ -114,4 +117,6 @@ public class GameControl : MonoBehaviour
         score+=amount;
         scoreText.text = "Score: " + score.ToString();
     }
+
+    
 }

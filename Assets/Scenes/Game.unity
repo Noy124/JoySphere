@@ -998,6 +998,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3357697833b14848aea990c65b65f9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  changeAngle: 30
 --- !u!1 &741418924
 GameObject:
   m_ObjectHideFlags: 0
@@ -3067,8 +3068,8 @@ MonoBehaviour:
   obstaclePrefab: {fileID: 1926181690}
   maxYPos: 2.89
   minYPos: -2.6
-  difficultyRaiseRate: 5
-  raiseDifficultyEverySeconds: 2
+  difficultyRaiseRate: 1
+  raiseDifficultyEverySeconds: 3
   heartChance: 20
   heart: {fileID: 72738023}
   camera: {fileID: 519420031}
@@ -3650,7 +3651,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2067626498
 Transform:
   m_ObjectHideFlags: 0

@@ -83,14 +83,14 @@ public class ObstaclePool : MonoBehaviour
             }
             int nextSpawnMult=1;
             int chance = Random.Range(0, 100);
-            Debug.Log(chance);
+            //Debug.Log(chance);
             if ( chance > heartChance || camera.WorldToScreenPoint(heart.GetComponent<Transform>().position).x > 0)
             {
                 nextSpawnMult = ChooseNextColor();
             }
             else
             {
-                Debug.Log("Heart!");
+                //Debug.Log("Heart!");
                 isNextHeart = true;
             }
             
@@ -157,7 +157,7 @@ public class ObstaclePool : MonoBehaviour
         }
 
         if (tempColor == last2Colors[0] && last2Colors[0] == last2Colors[1]) {
-            Debug.Log("Stopped a threesome :)");
+            //Debug.Log("Stopped a threesome :)");
             return ChooseNextColor();
         }
         else

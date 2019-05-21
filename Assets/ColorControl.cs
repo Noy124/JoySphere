@@ -5,16 +5,16 @@ using UnityEngine;
 
 public class ColorControl : MonoBehaviour
 {
-    public enum color {white,red,blue,yellow,purple,cyan,green,black};
+    public enum color {white,red,blue,green,purple,cyan,yellow,black};
     public static Color orange = new Color(1, 0.549f, 0);
+    public int changeAngle=30;
 
     private color currentColor = color.white;
     private color nextColor = color.white;
     private SpriteRenderer sr;
     private SerialPort sp;
-    bool gotNewColor = false;
+    private bool gotNewColor = false;
 
-    private int counter = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -24,9 +24,22 @@ public class ColorControl : MonoBehaviour
         if (!sp.IsOpen)
         {
             sp.Open();
-            sp.ReadTimeout = 1;
+            sp.ReadTimeout = 10;
             sp.Handshake = Handshake.None;
         }
+
+        SendAngle();
+        //while (true)
+        //{
+            
+        //if (approve != null)
+        //{
+        //    if (approve.ToString() == "OK")
+        //        break;
+        //}
+        //}
+
+        sp.ReadTimeout = 1;
     }
 
     // Update is called once per frame
@@ -74,6 +87,11 @@ public class ColorControl : MonoBehaviour
                     nextColor = color.white;
                     gotNewColor = true;
                     Debug.Log(data);
+                }else if (nextColorText == "9")
+                {
+                    SendAngle();
+                    gotNewColor = false;
+                    
                 }
                 //    switch (nextColorText)
                 //  {
@@ -202,6 +220,11 @@ public class ColorControl : MonoBehaviour
                 case color.cyan: sr.color = Color.cyan; SendCommand("6");  break;
             }
         }
+
+        if (Input.GetKey(KeyCode.R))
+        {
+            SendCommand("R");
+        }
     }
 
     public void ResetColor()
@@ -223,5 +246,25 @@ public class ColorControl : MonoBehaviour
         {
             Debug.LogWarning(e.ToString());
         }
+    }
+
+    public void SendAngle()
+    {
+        sp.WriteLine("A " + changeAngle);
+        string approve = null;
+        try
+        {
+            approve = sp.ReadLine();
+        }
+        catch (System.TimeoutException e)
+        { }
+
+        sp.BaseStream.Flush();
+
+    }
+
+    private void OnApplicationQuit()
+    {
+        sp.Close();
     }
 }
