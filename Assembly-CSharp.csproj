@@ -60,20 +60,44 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\BlockedByObstacle.cs" />
+    <Compile Include="Assets\_\Stuff\CodeMonkey\Assets.cs" />
+    <Compile Include="Assets\_\Stuff\CodeMonkey\CMDebug.cs" />
+    <Compile Include="Assets\_\Stuff\CodeMonkey\MonoBehaviours\CameraFollow.cs" />
+    <Compile Include="Assets\_\Stuff\CodeMonkey\MonoBehaviours\CameraFollowSetup.cs" />
+    <Compile Include="Assets\_\Stuff\CodeMonkey\MonoBehaviours\ComponentActions.cs" />
+    <Compile Include="Assets\_\Stuff\CodeMonkey\MonoBehaviours\PositionRendererSorter.cs" />
+    <Compile Include="Assets\_\Stuff\CodeMonkey\Utils\Button_Sprite.cs" />
+    <Compile Include="Assets\_\Stuff\CodeMonkey\Utils\Button_UI.cs" />
+    <Compile Include="Assets\_\Stuff\CodeMonkey\Utils\FunctionPeriodic.cs" />
+    <Compile Include="Assets\_\Stuff\CodeMonkey\Utils\FunctionTimer.cs" />
+    <Compile Include="Assets\_\Stuff\CodeMonkey\Utils\FunctionUpdater.cs" />
+    <Compile Include="Assets\_\Stuff\CodeMonkey\Utils\UI_Bar.cs" />
+    <Compile Include="Assets\_\Stuff\CodeMonkey\Utils\UI_BarMultiple.cs" />
+    <Compile Include="Assets\_\Stuff\CodeMonkey\Utils\UI_Sprite.cs" />
+    <Compile Include="Assets\_\Stuff\CodeMonkey\Utils\UI_TextComplex.cs" />
+    <Compile Include="Assets\_\Stuff\CodeMonkey\Utils\UtilsClass.cs" />
+    <Compile Include="Assets\_\Stuff\CodeMonkey\Utils\World_Bar.cs" />
+    <Compile Include="Assets\_\Stuff\CodeMonkey\Utils\World_Mesh.cs" />
+    <Compile Include="Assets\_\Stuff\CodeMonkey\Utils\World_Sprite.cs" />
+    <Compile Include="Assets\Blink.cs" />
     <Compile Include="Assets\BluetoothTest.cs" />
     <Compile Include="Assets\BordersObstacle.cs" />
     <Compile Include="Assets\CameraFollow.cs" />
     <Compile Include="Assets\ColorControl.cs" />
     <Compile Include="Assets\ExitOnClick.cs" />
     <Compile Include="Assets\GameControl.cs" />
+    <Compile Include="Assets\GetTable.cs" />
+    <Compile Include="Assets\GlobalControl.cs" />
     <Compile Include="Assets\Heart.cs" />
     <Compile Include="Assets\Movement.cs" />
     <Compile Include="Assets\Obstacle.cs" />
     <Compile Include="Assets\ObstaclePool.cs" />
+    <Compile Include="Assets\OnClickContinue.cs" />
+    <Compile Include="Assets\OnClickSaveandContinue.cs" />
     <Compile Include="Assets\PlayOnClick.cs" />
     <Compile Include="Assets\RepeatingBackground.cs" />
     <Compile Include="Assets\ScrollingObject.cs" />
+    <Compile Include="Assets\StarPool.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>C:/Users/n0yh1/Documents/Unity/JoySphereGame/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>

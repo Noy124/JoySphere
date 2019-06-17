@@ -50,3 +50,6 @@ TagManager:
   - name: Obstacles
     uniqueID: 3009682653
     locked: 0
+  - name: Background
+    uniqueID: 2272017635
+    locked: 0

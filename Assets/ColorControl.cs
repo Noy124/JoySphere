@@ -3,133 +3,140 @@ using System.Collections.Generic;
 using System.IO.Ports;
 using UnityEngine;
 
+
+//This class manages the color change of the player. Right now it's set to use the keyboard only, the arduino input is disabled. I marked areas that need changing when you need to switch to the ball
 public class ColorControl : MonoBehaviour
 {
-    public enum color {white,red,blue,green,purple,cyan,yellow,black};
-    public static Color orange = new Color(1, 0.549f, 0);
-    public int changeAngle=30;
+    public int changeAngle=30; //The angle it needs to detect in order to count as a color change
 
-    private color currentColor = color.white;
-    private color nextColor = color.white;
+    private Color currentColor = Color.white;
+    private Color nextColor = Color.white;
     private SpriteRenderer sr;
     private SerialPort sp;
     private bool gotNewColor = false;
+    //private string approve = null; //~~~~~~~~ Uncommen this line for the ball ~~~~~~~~~~~
 
 
     // Start is called before the first frame update
     void Start()
     {
         sr = GetComponent<SpriteRenderer>();
-        sp = new SerialPort("COM7", 9600);
-        if (!sp.IsOpen)
-        {
-            sp.Open();
-            sp.ReadTimeout = 10;
-            sp.Handshake = Handshake.None;
-        }
 
-        SendAngle();
+        //~~~~~~~~ Start uncommenting from here for the ball ~~~~~~~~~~~
+
+        //sp = new SerialPort("COM7", 9600);
+        //if (!sp.IsOpen)
+        //{
+        //    sp.Open();
+        //    sp.ReadTimeout = 10;
+        //    sp.Handshake = Handshake.None;
+        //}
+
+        ////Sends the angle to the arduino untill it gets back an OK response
+
         //while (true)
         //{
-            
-        //if (approve != null)
-        //{
-        //    if (approve.ToString() == "OK")
-        //        break;
-        //}
+            //SendAngle();
+
+            //if (approve != null)
+            //{
+            //    if (approve.ToString() == "OK")
+            //        break;
+            //}
         //}
 
-        sp.ReadTimeout = 1;
+        //sp.ReadTimeout = 1;
+
+        //~~~~~~~~ Stop uncommenting from here for the ball ~~~~~~~~~~~
     }
 
     // Update is called once per frame
     void Update()
     {
-        string data = null;
-        if (sp.IsOpen)
-        {
-            try
-            {
-                data = sp.ReadLine();
-            }
-            catch (System.TimeoutException e)
-            { }
+        //~~~~~~~~ Start uncommenting from here for the ball ~~~~~~~~~~~
 
-            sp.BaseStream.Flush();
+        //string data = null;
+        //if (sp.IsOpen)
+        //{
+        //    try
+        //    {
+        //        data = sp.ReadLine();
+        //    }
+        //    catch (System.TimeoutException e)
+        //    { }
 
-            string nextColorText;
-            if (data != null)
-            {
+        //    sp.BaseStream.Flush();
 
-                nextColorText = data.ToString();
-                Debug.Log(nextColorText);
+        //    string nextColorText;
+        //    if (data != null)
+        //    {
+                  ////Converts arduino input to color
 
-                if (nextColorText == "1" && currentColor != color.green)
-                {
-                    nextColor = color.green;
-                    gotNewColor = true;
-                    Debug.Log(data);
-                }
-                else if (nextColorText == "2" && currentColor != color.red)
-                {
-                    nextColor = color.red;
-                    gotNewColor = true;
-                    Debug.Log(data);
-                }
-                else if (nextColorText == "3" && currentColor != color.blue)
-                {
-                    nextColor = color.blue;
-                    gotNewColor = true;
-                    Debug.Log(data);
-                }
-                else if (nextColorText == "4" && currentColor != color.white)
-                {
-                    nextColor = color.white;
-                    gotNewColor = true;
-                    Debug.Log(data);
-                }else if (nextColorText == "9")
-                {
-                    SendAngle();
-                    gotNewColor = false;
-                    
-                }
-                //    switch (nextColorText)
-                //  {
-                //    case "1": nextColor = color.yellow;
-                //      gotNewColor = true; break;
-                // case "2": nextColor = color.red;
-                //    gotNewColor = true; break;
-                // case "3": nextColor = color.blue;
-                //    gotNewColor = true; break;
-                // case "4": nextColor = color.white;
-                //    gotNewColor = true; break;
+        //        nextColorText = data.ToString();
+        //        Debug.Log(nextColorText);
 
-                //}
+        //        if (nextColorText == "1" && currentColor != color.green)
+        //        {
+        //            nextColor = Color.green;
+        //            gotNewColor = true;
+        //            Debug.Log(data);
+        //        }
+        //        else if (nextColorText == "2" && currentColor != color.red)
+        //        {
+        //            nextColor = Color.red;
+        //            gotNewColor = true;
+        //            Debug.Log(data);
+        //        }
+        //        else if (nextColorText == "3" && currentColor != color.blue)
+        //        {
+        //            nextColor = Color.blue;
+        //            gotNewColor = true;
+        //            Debug.Log(data);
+        //        }
+        //        else if (nextColorText == "4" && currentColor != color.white)
+        //        {
+        //            nextColor = Color.white;
+        //            gotNewColor = true;
+        //            Debug.Log(data);
+        //        }else if (nextColorText == "9")
+        //        {
+                      ////In case the ball went through a reset, sending angle again
+                      
+        //            SendAngle();
+        //            gotNewColor = false;
 
-            }
-        }
+        //        }
+
+        //    }
+        //}
+        //~~~~~~~~ Stop uncommenting from here for the ball ~~~~~~~~~~~
+
+        //~~~~~~~~ Start uncommenting from here to disable keyboard input ~~~~~~~~~~~
 
         if (Input.GetKey("1"))
         {
-           nextColor = color.blue;
+           nextColor = Color.blue;
             gotNewColor = true;
         }
         else if (Input.GetKey("2"))
         {
-           nextColor = color.green;
+           nextColor = Color.green;
             gotNewColor = true;
         }
         else if (Input.GetKey("3"))
         {
-           nextColor = color.red;
+           nextColor = Color.red;
             gotNewColor = true;
         }
         else if(Input.GetKey("4"))
         {
-           nextColor = color.white;
+           nextColor = Color.white;
             gotNewColor = true;
         }
+        //~~~~~~~~ Stop uncommenting from here to disable keyboard input ~~~~~~~~~~~
 
+
+        //From here on calculates the new player color
         if (gotNewColor && !GameControl.instance.gameOver && !GameControl.instance.pause)
         {
             gotNewColor = false;
@@ -139,132 +146,204 @@ public class ColorControl : MonoBehaviour
             }
             else if (sr.color == Color.blue)
             {
-                switch (nextColor)
-                {
-                    case color.green: currentColor = color.cyan; break;
-                    case color.red: currentColor = color.purple; break;
-                    case color.white: currentColor = color.white; break;
-                    case color.blue: currentColor = color.blue; break;
-                }
-            }
-            else if (sr.color == Color.red)
-            {
-                switch (nextColor)
-                {
-                    case color.green: currentColor = color.yellow; break;
-                    case color.red: currentColor = color.red; break;
-                    case color.white: currentColor = color.white; break;
-                    case color.blue: currentColor = color.purple; break;
-                }
-            }
-            else if (sr.color == Color.green)
-            {
-                switch (nextColor)
-                {
-                    case color.green: currentColor = color.green; break;
-                    case color.red: currentColor = color.yellow; break;
-                    case color.white: currentColor = color.white; break;
-                    case color.blue: currentColor = color.cyan; break;
-                }
-            }
-            else if (sr.color == Color.magenta)
-            {
-                switch (nextColor)
-                {
-                    case color.green: currentColor = color.black; break;
-                    case color.red: currentColor = color.purple; break;
-                    case color.white: currentColor = color.white; break;
-                    case color.blue: currentColor = color.purple; break;
-                }
-            }
-            else if (sr.color == Color.yellow)
-            {
-                switch (nextColor)
-                {
-                    case color.green: currentColor = color.yellow; break;
-                    case color.red: currentColor = color.yellow; break;
-                    case color.white: currentColor = color.white; break;
-                    case color.blue: currentColor = color.black; break;
-                }
-            }
-            else if (sr.color == Color.black)
-            {
-                switch (nextColor)
-                {
-                    case color.green: currentColor = color.black; break;
-                    case color.red: currentColor = color.black; break;
-                    case color.white: currentColor = color.white; break;
-                    case color.blue: currentColor = color.black; break;
-                }
-            }
-            else if (sr.color == Color.cyan)
-            {
-                switch (nextColor)
-                {
-                    case color.green: currentColor = color.cyan; break;
-                    case color.red: currentColor = color.black; break;
-                    case color.white: currentColor = color.white; break;
-                    case color.blue: currentColor = color.cyan; break;
-                }
+
+                if (nextColor == Color.green)
+                    currentColor = Color.cyan;
+
+                if (nextColor == Color.red)
+                    currentColor = Color.magenta;
+
+                if (nextColor == Color.white)
+                    currentColor = Color.white;
+
+                if (nextColor == Color.blue)
+                    currentColor = Color.blue;
+
             }
 
-            switch (currentColor)
+            else if (sr.color == Color.red)
             {
-                case color.white: sr.color = Color.white; SendCommand("0"); break;
-                case color.red: sr.color = Color.red; SendCommand("1");  break;
-                case color.blue: sr.color = Color.blue; SendCommand("2");  break;
-                case color.yellow: sr.color = Color.yellow; SendCommand("3");  break;
-                case color.purple: sr.color = Color.magenta; SendCommand("4");  break;
-                case color.green: sr.color = Color.green; SendCommand("5");  break;
-                case color.black: sr.color = Color.black; SendCommand("7"); break;
-                case color.cyan: sr.color = Color.cyan; SendCommand("6");  break;
+               
+                if (nextColor == Color.green)
+                    currentColor = Color.yellow;
+
+                if (nextColor == Color.red)
+                    currentColor = Color.red;
+
+                if (nextColor == Color.white)
+                    currentColor = Color.white;
+
+                if (nextColor == Color.blue)
+                    currentColor = Color.magenta;
             }
+
+            else if (sr.color == Color.green)
+            {
+                
+                if (nextColor == Color.green)
+                    currentColor = Color.green;
+
+                if (nextColor == Color.red)
+                    currentColor = Color.yellow;
+
+                if (nextColor == Color.white)
+                    currentColor = Color.white;
+
+                if (nextColor == Color.blue)
+                    currentColor = Color.cyan;
+            }
+
+            else if (sr.color == Color.magenta)
+            {
+                
+                if (nextColor == Color.green)
+                    currentColor = Color.black;
+
+                if (nextColor == Color.red)
+                    currentColor = Color.magenta;
+
+                if (nextColor == Color.white)
+                    currentColor = Color.white;
+
+                if (nextColor == Color.blue)
+                    currentColor = Color.magenta;
+            }
+
+            else if (sr.color == Color.yellow)
+            {
+                
+                if (nextColor == Color.green)
+                    currentColor = Color.yellow;
+
+                if (nextColor == Color.red)
+                    currentColor = Color.yellow;
+
+                if (nextColor == Color.white)
+                    currentColor = Color.white;
+
+                if (nextColor == Color.blue)
+                    currentColor = Color.black;
+            }
+
+            else if (sr.color == Color.black)
+            {
+                
+                if (nextColor == Color.green)
+                    currentColor = Color.black;
+
+                if (nextColor == Color.red)
+                    currentColor = Color.black;
+
+                if (nextColor == Color.white)
+                    currentColor = Color.white;
+
+                if (nextColor == Color.blue)
+                    currentColor = Color.black;
+            }
+
+            else if (sr.color == Color.cyan)
+            {
+                
+                if (nextColor == Color.green)
+                    currentColor = Color.cyan;
+
+                if (nextColor == Color.red)
+                    currentColor = Color.black;
+
+                if (nextColor == Color.white)
+                    currentColor = Color.white;
+
+                if (nextColor == Color.blue)
+                    currentColor = Color.cyan;
+            }
+
+            
+            sr.color = currentColor;
+
+            if (currentColor == Color.white)
+                SendCommand("0");
+
+            if (currentColor == Color.red)
+                SendCommand("1");
+
+            if (currentColor == Color.blue)
+                SendCommand("2");
+
+            if (currentColor == Color.yellow)
+                SendCommand("3");
+
+            if (currentColor == Color.magenta)
+                SendCommand("4");
+
+            if (currentColor == Color.green)
+                SendCommand("5");
+
+            if (currentColor == Color.black)
+                SendCommand("7");
+            
+            if (currentColor == Color.cyan)
+                SendCommand("6");
+            
+
         }
 
         if (Input.GetKey(KeyCode.R))
         {
+            //Reset the bluetooth
             SendCommand("R");
         }
     }
 
+    //For after hitting obstacles
     public void ResetColor()
     {
-        currentColor = color.white;
-        nextColor = color.white;
+        currentColor = Color.white;
+        nextColor = Color.white;
         sr.color = Color.white;
         gotNewColor = false;
-        Debug.Log("RESET!!");
     }
 
     public void SendCommand(string cmd)
     {
-        try
-        {
-            sp.WriteLine(cmd);
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogWarning(e.ToString());
-        }
-    }
+        //~~~~~~~~ Start uncommenting from here for the ball ~~~~~~~~~~~
 
-    public void SendAngle()
-    {
-        sp.WriteLine("A " + changeAngle);
-        string approve = null;
-        try
-        {
-            approve = sp.ReadLine();
-        }
-        catch (System.TimeoutException e)
-        { }
+        ////Send a command to the ball
+        //try
+        //{
+        //    sp.WriteLine(cmd);
+        //}
+        //catch (System.Exception e)
+        //{
+        //    //Debug.LogWarning(e.ToString());
+        //}
 
-        sp.BaseStream.Flush();
+        //~~~~~~~~ Stop uncommenting from here for the ball ~~~~~~~~~~~
 
     }
+
+    //~~~~~~~~ Start uncommenting from here for the ball ~~~~~~~~~~~
+
+    //public void SendAngle()
+    //{
+    //    sp.WriteLine("A " + changeAngle);
+
+    //    try
+    //    {
+    //        approve = sp.ReadLine();
+    //    }
+    //    catch (System.TimeoutException e)
+    //    { }
+
+    //    sp.BaseStream.Flush();
+
+    //}
+
+    //~~~~~~~~ Stop uncommenting from here for the ball ~~~~~~~~~~~
+
 
     private void OnApplicationQuit()
     {
-        sp.Close();
+        //sp.Close(); //~~~~~~~~ Uncomment this line for the ball ~~~~~~~~~~~
+
     }
 }
