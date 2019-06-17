@@ -89,6 +89,7 @@
     <Compile Include="Assets\GetTable.cs" />
     <Compile Include="Assets\GlobalControl.cs" />
     <Compile Include="Assets\Heart.cs" />
+    <Compile Include="Assets\highscoresMenu.cs" />
     <Compile Include="Assets\Movement.cs" />
     <Compile Include="Assets\Obstacle.cs" />
     <Compile Include="Assets\ObstaclePool.cs" />

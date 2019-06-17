@@ -11,7 +11,8 @@ public class Heart : MonoBehaviour
         if (collision.gameObject == thisPlayer)
         {
             this.gameObject.SetActive(false);
-            GameControl.health += 1;
+            if(GameControl.health<9)
+                GameControl.health += 1;
         }
     }
 }

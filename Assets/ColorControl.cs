@@ -307,10 +307,11 @@ public class ColorControl : MonoBehaviour
     {
         //~~~~~~~~ Start uncommenting from here for the ball ~~~~~~~~~~~
 
-        ////Send a command to the ball
+        //Send a command to the ball
         //try
         //{
         //    sp.WriteLine(cmd);
+        //    Movement.spMovement.WriteLine(cmd);
         //}
         //catch (System.Exception e)
         //{

@@ -25,6 +25,7 @@ public class Obstacle : MonoBehaviour
             SpriteRenderer thisSr = GetComponent<SpriteRenderer>();
             if (playerSr.color == thisSr.color)
             {
+                GameControl.health += 1;
                 if (playerSr.color == Color.red || playerSr.color == Color.blue || playerSr.color == Color.yellow)
                 {
                     GameControl.instance.Score();

@@ -4240,8 +4240,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   poolSize: 25
   obstaclePrefab: {fileID: 1926181690}
-  maxYPos: 2.1
-  minYPos: -1.66
+  maxYPos: 0.1
+  minYPos: 0.1
   difficultyRaiseRate: 1
   raiseDifficultyEverySeconds: 3
   heart: {fileID: 72738023}

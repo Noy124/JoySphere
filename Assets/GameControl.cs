@@ -48,12 +48,12 @@ public class GameControl : MonoBehaviour
         //Setting up the health bar. I had a problem with the resolution so I made the hearts a single image that changes instead of 9 seperate hearts
         if (!gameOver && !pause)
         {
-            if (health > 9)
-                health = 9;
+            if (health > 10)
+                health = 10;
 
             switch (health)
             {
-                case 9: nineHearts.gameObject.SetActive(true); break;
+                case 10:case 9: nineHearts.gameObject.SetActive(true); break;
                 case 8: nineHearts.gameObject.SetActive(false);
                     eightHearts.gameObject.SetActive(true); break;
                 case 7:
@@ -151,6 +151,7 @@ public class GameControl : MonoBehaviour
                 string playerB = GlobalControl.Instance.playerB;
                 StartCoroutine(GetRequest("https://joysphere-high-scores.azurewebsites.net/api/InsertScore?code=tBGQNyRYHaDY1JtoG/YkNEaeCg2RT6VjxZsFkRty57l9LoOKQG1CiA==&player_a=" + playerA + "&player_b=" + playerB + "&score=" + score));
 
+                System.Threading.Thread.Sleep(2);
                 SceneManager.LoadScene("Highscores");
             }
         }

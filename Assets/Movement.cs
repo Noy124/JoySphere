@@ -14,7 +14,8 @@ public class Movement : MonoBehaviour
     //This is the only thing you should change, it scales the speed of the player
     public float speedScale = 1f;
     
-    private SerialPort sp;
+    public static SerialPort spMovement;
+
     private long velocity;
     private float degree;
     private string data = "";
@@ -36,13 +37,13 @@ public class Movement : MonoBehaviour
         trans = GetComponent<Transform>();
         
         //If you switch bluetooth, this part needs to change to the correct COM and frequency of the new bluetooth
-        sp = new SerialPort("COM4", 38400);
+        spMovement = new SerialPort("COM4", 38400);
         
-        if (!sp.IsOpen)
+        if (!spMovement.IsOpen)
         {
-            sp.Open();
-            sp.ReadTimeout = 10;
-            sp.Handshake = Handshake.None;
+            spMovement.Open();
+            spMovement.ReadTimeout = 10;
+            spMovement.Handshake = Handshake.None;
             //Debug.Log("Opened port");
         }
 
@@ -59,16 +60,16 @@ public class Movement : MonoBehaviour
         while (true)
         {
 
-            if (sp.IsOpen)
+            if (spMovement.IsOpen)
             {
                 try
                 {
-                    data = sp.ReadLine();
+                    data = spMovement.ReadLine();
                     Debug.Log("Data: " + data);
                 }
                 catch (System.TimeoutException) { Debug.Log("Timeout"); }
 
-                sp.BaseStream.Flush();
+                spMovement.BaseStream.Flush();
 
             }
         }
@@ -88,7 +89,7 @@ public class Movement : MonoBehaviour
         float pitch, roll;
 
         string[] msg = data.ToString().Split(' ');
-        if (sp.IsOpen)
+        if (spMovement.IsOpen)
         {
            
             try
@@ -152,7 +153,7 @@ public class Movement : MonoBehaviour
     private void OnApplicationQuit()
     {
         //Closing the port
-        if(sp.IsOpen)
-            sp.Close();
+        if(spMovement.IsOpen)
+            spMovement.Close();
     }
 }
