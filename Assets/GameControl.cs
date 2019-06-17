@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using System.IO.Ports;
 using UnityEngine.Networking;
 
@@ -151,7 +150,7 @@ public class GameControl : MonoBehaviour
                 string playerB = GlobalControl.Instance.playerB;
                 StartCoroutine(GetRequest("https://joysphere-high-scores.azurewebsites.net/api/InsertScore?code=tBGQNyRYHaDY1JtoG/YkNEaeCg2RT6VjxZsFkRty57l9LoOKQG1CiA==&player_a=" + playerA + "&player_b=" + playerB + "&score=" + score));
 
-                System.Threading.Thread.Sleep(2);
+                System.Threading.Thread.Sleep(2000);
                 SceneManager.LoadScene("Highscores");
             }
         }

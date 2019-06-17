@@ -9,7 +9,7 @@ public class ObstaclePool : MonoBehaviour
 
 
     public int poolSize = 10;// How many objects should the game make. More obstacles = no obstacles dissapearing on screen, though might load slower
-    public GameObject obstaclePrefab;
+    public GameObject firstFishPrefab, secondFishPrefab;
 
     //Unless you change the size of the screen (which is not reccomended), don't touch these. they determine the max and min y position for obstacle spawn
     public float maxYPos = 1.4f;
@@ -27,11 +27,12 @@ public class ObstaclePool : MonoBehaviour
 
     public SpriteRenderer firstFish, secondFish;
 
-    private GameObject[] obstacles;
+    private GameObject[] firsFishObstacles, secondFishObstacles;
     private Vector2 obstaclePoolPosition = new Vector2(20, 0);
     private float timeSinceLastSpawned;
     private float spawnXPos = 20f;
-    private int currentObstacle = 0;
+    private int currentFishOne = 0;
+    private int currentFishTwo = 0;
     private float nextSpawn = 2;
     private float startTime;
 
@@ -49,18 +50,28 @@ public class ObstaclePool : MonoBehaviour
     private int last2ColorsI=0;
     private int heartChance = 10;
     private bool isFirstFish=false;
-    float fishSize=1f;
+    private float fishSize=1f;
+    private float colliderOffsetX = 0.02f;
+    private float colliderOffsetY = -0.03f;
+    private float colliderSizeX = 0.55f;
+    private float colliderSizeY = 0.29f;
 
 
 
     // Start is called before the first frame update
     void Start()
     {
-        obstacles = new GameObject[poolSize];
+        firsFishObstacles = new GameObject[poolSize];
+        secondFishObstacles = new GameObject[poolSize];
         for (int i = 0; i < poolSize; i++)
         {
-            obstacles[i] = (GameObject)Instantiate(obstaclePrefab, obstaclePoolPosition, Quaternion.identity);
-            obstacles[i].SetActive(false);
+            firsFishObstacles[i] = (GameObject)Instantiate(firstFishPrefab, obstaclePoolPosition, Quaternion.identity);
+            firsFishObstacles[i].SetActive(false);
+        }
+        for (int i = 0; i < poolSize; i++)
+        {
+            secondFishObstacles[i] = (GameObject)Instantiate(secondFishPrefab, obstaclePoolPosition, Quaternion.identity);
+            secondFishObstacles[i].SetActive(false);
         }
         startTime = Time.time;
         last2Colors = new Color[2] {Color.white, Color.white };
@@ -84,21 +95,27 @@ public class ObstaclePool : MonoBehaviour
             }
             else 
             {
+                SpriteRenderer sr;
                 if (isFirstFish)
                 {
-                    obstacles[currentObstacle].GetComponent<SpriteRenderer>().sprite = firstFish.sprite;
+                    firsFishObstacles[currentFishOne].GetComponent<SpriteRenderer>().sprite = firstFish.sprite;
+                    firsFishObstacles[currentFishOne].transform.localScale = new Vector3(fishSize, fishSize, 0);
+                    firsFishObstacles[currentFishOne].transform.position = new Vector2(spawnXPos, spawnYPos);
+                    firsFishObstacles[currentFishOne].GetComponent<Obstacle>().alreadyInjuredCat = false;
+                    firsFishObstacles[currentFishOne].SetActive(true);
+                    sr = firsFishObstacles[currentFishOne].GetComponent<SpriteRenderer>();
+
                 }
                 else
                 {
-                    obstacles[currentObstacle].GetComponent<SpriteRenderer>().sprite = secondFish.sprite;
+                    secondFishObstacles[currentFishTwo].GetComponent<SpriteRenderer>().sprite = secondFish.sprite;
+                    secondFishObstacles[currentFishTwo].transform.localScale = new Vector3(fishSize, fishSize, 0);
+                    secondFishObstacles[currentFishTwo].transform.position = new Vector2(spawnXPos, spawnYPos);
+                    secondFishObstacles[currentFishTwo].GetComponent<Obstacle>().alreadyInjuredCat = false;
+                    secondFishObstacles[currentFishTwo].SetActive(true);
+                    sr = secondFishObstacles[currentFishTwo].GetComponent<SpriteRenderer>();
 
                 }
-
-                obstacles[currentObstacle].transform.localScale = new Vector3 (fishSize,fishSize,0);
-                obstacles[currentObstacle].transform.position = new Vector2(spawnXPos, spawnYPos);
-                obstacles[currentObstacle].GetComponent<Obstacle>().alreadyInjuredCat = false;
-                obstacles[currentObstacle].SetActive(true);
-                SpriteRenderer sr = obstacles[currentObstacle].GetComponent<SpriteRenderer>();
 
                 sr.color = nextObstacleColor;
 
@@ -117,18 +134,14 @@ public class ObstaclePool : MonoBehaviour
             }
 
             isFirstFish = Random.Range(0, 2) == 1;
-            switch(Random.Range(1, 6))
-            {
-                case 1: fishSize = 1f;break;
-                case 2: fishSize = 1.5f;break;
-                case 3: fishSize = 2f;break;
-                case 4: fishSize = 2.5f;break;
-                case 5: fishSize = 3f;break;
-            }
 
-            currentObstacle++;
-            if (currentObstacle >= poolSize)
-                currentObstacle = 0;
+            currentFishOne++;
+            if (currentFishOne >= poolSize)
+                currentFishOne = 0;
+
+            currentFishTwo++;
+            if (currentFishTwo >= poolSize)
+                currentFishTwo = 0;
 
             //When to spawn next obstacle/heart
             nextSpawn = Random.Range(minNextSpawn, maxNextSpawn)*nextSpawnMult;

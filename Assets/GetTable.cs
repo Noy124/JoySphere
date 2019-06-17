@@ -23,7 +23,8 @@ public class GetTable : MonoBehaviour
 
     public static HighScoreLine[] hsTable;
     public int amountOfEntriesToSave = 10;
-    public GameObject errorText;
+    public GameObject errorText, loadingText;
+
 
     private Transform entryContainer;
     private Transform entryTemplate;
@@ -101,8 +102,9 @@ public class GetTable : MonoBehaviour
         entryTemplate = entryContainer.Find("HighscoreEntryTemplate");
 
         entryTemplate.gameObject.SetActive(false);
-       
-        
+        loadingText.gameObject.SetActive(false);
+
+
         HighScoreLine[] highScoreData = hsTable;
 
         float templateStartingHeight = 35f;

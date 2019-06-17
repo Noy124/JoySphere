@@ -114,6 +114,7 @@ public class Movement : MonoBehaviour
             }
             catch (System.FormatException)
             {
+
             }
             catch (System.IndexOutOfRangeException) {  }
         }    

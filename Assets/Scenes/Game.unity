@@ -3535,18 +3535,18 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.19762236, y: 0.030591488}
+  m_Offset: {x: -0.09581393, y: 0.014348984}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.63, y: 0.62}
+    oldSize: {x: 1.38, y: 0.54}
     newSize: {x: 1.84, y: 1.19}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.1243638, y: 0.3247099}
+  m_Size: {x: 1.0182017, y: 0.29222488}
   m_EdgeRadius: 0
 --- !u!114 &1469055735
 MonoBehaviour:
@@ -3614,7 +3614,7 @@ SpriteRenderer:
   m_SortingLayerID: -1285284643
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 6b7cb2c171a3af44b80448ae045da608, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3eeff45f0d7605d45b6e8414766fecdd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -3633,7 +3633,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1469055732}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.57, y: -9.09, z: 10}
+  m_LocalPosition: {x: 4.34, y: -13.02, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2071618885}
@@ -4239,9 +4239,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolSize: 25
-  obstaclePrefab: {fileID: 1926181690}
-  maxYPos: 0.1
-  minYPos: 0.1
+  firstFishPrefab: {fileID: 1926181690}
+  secondFishPrefab: {fileID: 1469055732}
+  maxYPos: 1.4
+  minYPos: -1.8
   difficultyRaiseRate: 1
   raiseDifficultyEverySeconds: 3
   heart: {fileID: 72738023}
@@ -4746,7 +4747,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.027278662, y: -0.037198067}
+  m_Offset: {x: 0.0072053373, y: -0.03719778}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -4757,7 +4758,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.5554185, y: 0.2922821}
+  m_Size: {x: 0.59556514, y: 0.2922815}
   m_EdgeRadius: 0
 --- !u!1 &1977021271
 GameObject:
