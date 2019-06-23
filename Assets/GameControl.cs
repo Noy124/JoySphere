@@ -142,6 +142,7 @@ public class GameControl : MonoBehaviour
             twoHearts.gameObject.SetActive(false);
             oneHeart.gameObject.SetActive(false);
             noHearts.gameObject.SetActive(true);
+            
 
             //Sending names and scores and changing the scene to highscores
             if (Input.GetKey("space"))

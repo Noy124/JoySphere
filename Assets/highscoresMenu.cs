@@ -14,11 +14,11 @@ public class highscoresMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey("N"))
+        if (Input.GetKey(KeyCode.N))
         {
             SceneManager.LoadScene("Player Names");
         }
-        if (Input.GetKey("E"))
+        if (Input.GetKey(KeyCode.E))
         {
             SceneManager.LoadScene("Main Menu");
         }
