@@ -8,6 +8,8 @@ using UnityEngine;
 public class ColorControl : MonoBehaviour
 {
     public int changeAngle=30; //The angle it needs to detect in order to count as a color change
+    public GameObject body;
+    public Sprite black, white, red, green, blue, yellow, magenta, cyan;
 
     private Color currentColor = Color.white;
     private Color nextColor = Color.white;
@@ -163,7 +165,7 @@ public class ColorControl : MonoBehaviour
 
             else if (sr.color == Color.red)
             {
-               
+
                 if (nextColor == Color.green)
                     currentColor = Color.yellow;
 
@@ -179,7 +181,7 @@ public class ColorControl : MonoBehaviour
 
             else if (sr.color == Color.green)
             {
-                
+
                 if (nextColor == Color.green)
                     currentColor = Color.green;
 
@@ -195,7 +197,7 @@ public class ColorControl : MonoBehaviour
 
             else if (sr.color == Color.magenta)
             {
-                
+
                 if (nextColor == Color.green)
                     currentColor = Color.black;
 
@@ -211,7 +213,7 @@ public class ColorControl : MonoBehaviour
 
             else if (sr.color == Color.yellow)
             {
-                
+
                 if (nextColor == Color.green)
                     currentColor = Color.yellow;
 
@@ -227,7 +229,7 @@ public class ColorControl : MonoBehaviour
 
             else if (sr.color == Color.black)
             {
-                
+
                 if (nextColor == Color.green)
                     currentColor = Color.black;
 
@@ -243,7 +245,7 @@ public class ColorControl : MonoBehaviour
 
             else if (sr.color == Color.cyan)
             {
-                
+
                 if (nextColor == Color.green)
                     currentColor = Color.cyan;
 
@@ -257,33 +259,39 @@ public class ColorControl : MonoBehaviour
                     currentColor = Color.cyan;
             }
 
-            
+
             sr.color = currentColor;
 
+            SpriteRenderer bsr = body.GetComponent<SpriteRenderer>();
+
             if (currentColor == Color.white)
-                SendCommand("0");
+            {
+                bsr.sprite = black;
+            }
 
             if (currentColor == Color.red)
-                SendCommand("1");
+            {
+                bsr.sprite = red;
+            }
 
             if (currentColor == Color.blue)
-                SendCommand("2");
+                bsr.sprite = blue;
 
             if (currentColor == Color.yellow)
-                SendCommand("3");
+                bsr.sprite = yellow;
 
             if (currentColor == Color.magenta)
-                SendCommand("4");
+                bsr.sprite = magenta;
 
             if (currentColor == Color.green)
-                SendCommand("5");
+                bsr.sprite = green;
 
             if (currentColor == Color.black)
-                SendCommand("7");
-            
+                bsr.sprite = white;
+
             if (currentColor == Color.cyan)
-                SendCommand("6");
-            
+                bsr.sprite = cyan;
+
 
         }
 
@@ -297,9 +305,11 @@ public class ColorControl : MonoBehaviour
     //For after hitting obstacles
     public void ResetColor()
     {
+       
         currentColor = Color.white;
         nextColor = Color.white;
         sr.color = Color.white;
+        body.GetComponent<SpriteRenderer>().sprite = black;
         gotNewColor = false;
     }
 

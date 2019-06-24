@@ -65,6 +65,7 @@
     <Compile Include="Assets\BordersObstacle.cs" />
     <Compile Include="Assets\CameraFollow.cs" />
     <Compile Include="Assets\ColorControl.cs" />
+    <Compile Include="Assets\DoAnimation.cs" />
     <Compile Include="Assets\ExitOnClick.cs" />
     <Compile Include="Assets\GameControl.cs" />
     <Compile Include="Assets\GetTable.cs" />

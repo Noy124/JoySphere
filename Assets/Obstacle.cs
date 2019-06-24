@@ -23,13 +23,15 @@ public class Obstacle : MonoBehaviour
         {
             SpriteRenderer playerSr = thisPlayer.GetComponent<SpriteRenderer>();
             SpriteRenderer thisSr = GetComponent<SpriteRenderer>();
+
             if (playerSr.color == thisSr.color)
             {
                 GameControl.health += 1;
-                if (playerSr.color == Color.red || playerSr.color == Color.blue || playerSr.color == Color.yellow)
+                if (playerSr.color == Color.red || playerSr.color == Color.blue || playerSr.color == Color.green)
                 {
                     GameControl.instance.Score();
-                }else if(playerSr.color == Color.black)
+                }
+                else if (playerSr.color == Color.black)
                 {
                     GameControl.instance.Score(3);
                 }
@@ -38,12 +40,12 @@ public class Obstacle : MonoBehaviour
                     GameControl.instance.Score(2);
                 }
             }
-            //else
-            //{
-            //    //If the color was wrong, lower difficulty
-            //    GameControl.health -= 1;
-            //    ObstaclePool.LowerDifficulty();
-            //}
+            else
+            {
+                //If the color was wrong, lower difficulty
+                GameControl.health -= 1;
+                ObstaclePool.LowerDifficulty();
+            }
 
             this.gameObject.SetActive(false);
             thisPlayer.GetComponent<ColorControl>().ResetColor();
