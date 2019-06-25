@@ -16,7 +16,7 @@ public class ColorControl : MonoBehaviour
     private Color nextColor = Color.black;
     private SpriteRenderer sr;
     private bool gotNewColor = false;
-    //private string approve = null; //~~~~~~~~ Uncommen this line for the ball ~~~~~~~~~~~
+    private string approve = null; //~~~~~~~~ Uncommen this line for the ball ~~~~~~~~~~~
 
 
     // Start is called before the first frame update
@@ -29,28 +29,28 @@ public class ColorControl : MonoBehaviour
         sr.color = Color.black;
         //~~~~~~~~ Start uncommenting from here for the ball ~~~~~~~~~~~
 
-        //sp = new SerialPort("COM7", 9600);
-        //if (!sp.IsOpen)
-        //{
-        //    sp.Open();
-        //    sp.ReadTimeout = 10;
-        //    sp.Handshake = Handshake.None;
-        //}
+        sp = new SerialPort("COM7", 9600);
+        if (!sp.IsOpen)
+        {
+            sp.Open();
+            sp.ReadTimeout = 10;
+            sp.Handshake = Handshake.None;
+        }
 
-        ////Sends the angle to the arduino untill it gets back an OK response
+        //Sends the angle to the arduino untill it gets back an OK response
 
-        //while (true)
-        //{
-            //SendAngle();
+        while (true)
+        {
+            SendAngle();
 
-            //if (approve != null)
-            //{
-            //    if (approve.ToString() == "OK")
-            //        break;
-            //}
-        //}
+            if (approve != null)
+            {
+                if (approve.ToString() == "OK")
+                    break;
+            }
+        }
 
-        //sp.ReadTimeout = 1;
+        sp.ReadTimeout = 1;
 
         //~~~~~~~~ Stop uncommenting from here for the ball ~~~~~~~~~~~
     }
@@ -60,60 +60,61 @@ public class ColorControl : MonoBehaviour
     {
         //~~~~~~~~ Start uncommenting from here for the ball ~~~~~~~~~~~
 
-        //string data = null;
-        //if (sp.IsOpen)
-        //{
-        //    try
-        //    {
-        //        data = sp.ReadLine();
-        //    }
-        //    catch (System.TimeoutException e)
-        //    { }
+        string data = null;
+        if (sp.IsOpen)
+        {
+            try
+            {
+                data = sp.ReadLine();
+            }
+            catch (System.TimeoutException e)
+            { }
 
-        //    sp.BaseStream.Flush();
+            sp.BaseStream.Flush();
 
-        //    string nextColorText;
-        //    if (data != null)
-        //    {
-                  ////Converts arduino input to color
+            string nextColorText;
+            if (data != null)
+            {
+                //Converts arduino input to color
 
-        //        nextColorText = data.ToString();
-        //        Debug.Log(nextColorText);
+                nextColorText = data.ToString();
+                Debug.Log(nextColorText);
 
-        //        if (nextColorText == "1" && currentColor != color.green)
-        //        {
-        //            nextColor = Color.green;
-        //            gotNewColor = true;
-        //            Debug.Log(data);
-        //        }
-        //        else if (nextColorText == "2" && currentColor != color.red)
-        //        {
-        //            nextColor = Color.red;
-        //            gotNewColor = true;
-        //            Debug.Log(data);
-        //        }
-        //        else if (nextColorText == "3" && currentColor != color.blue)
-        //        {
-        //            nextColor = Color.blue;
-        //            gotNewColor = true;
-        //            Debug.Log(data);
-        //        }
-        //        else if (nextColorText == "4" && currentColor != color.white)
-        //        {
-        //            nextColor = Color.white;
-        //            gotNewColor = true;
-        //            Debug.Log(data);
-        //        }else if (nextColorText == "9")
-        //        {
-                      ////In case the ball went through a reset, sending angle again
-                      
-        //            SendAngle();
-        //            gotNewColor = false;
+                if (nextColorText == "1" && currentColor != Color.green)
+                {
+                    nextColor = Color.green;
+                    gotNewColor = true;
+                    Debug.Log(data);
+                }
+                else if (nextColorText == "2" && currentColor != Color.red)
+                {
+                    nextColor = Color.red;
+                    gotNewColor = true;
+                    Debug.Log(data);
+                }
+                else if (nextColorText == "3" && currentColor != Color.blue)
+                {
+                    nextColor = Color.blue;
+                    gotNewColor = true;
+                    Debug.Log(data);
+                }
+                else if (nextColorText == "4" && currentColor != Color.white)
+                {
+                    nextColor = Color.white;
+                    gotNewColor = true;
+                    Debug.Log(data);
+                }
+                else if (nextColorText == "9")
+                {
+                    //In case the ball went through a reset, sending angle again
 
-        //        }
+                    SendAngle();
+                    gotNewColor = false;
 
-        //    }
-        //}
+                }
+
+            }
+        }
         //~~~~~~~~ Stop uncommenting from here for the ball ~~~~~~~~~~~
 
         //~~~~~~~~ Start uncommenting from here to disable keyboard input ~~~~~~~~~~~
@@ -323,15 +324,15 @@ public class ColorControl : MonoBehaviour
         //~~~~~~~~ Start uncommenting from here for the ball ~~~~~~~~~~~
 
         //Send a command to the ball
-        //try
-        //{
-        //    sp.WriteLine(cmd);
-        //    Movement.spMovement.WriteLine(cmd);
-        //}
-        //catch (System.Exception e)
-        //{
-        //    //Debug.LogWarning(e.ToString());
-        //}
+        try
+        {
+            sp.WriteLine(cmd);
+            Movement.spMovement.WriteLine(cmd);
+        }
+        catch (System.Exception e)
+        {
+            //Debug.LogWarning(e.ToString());
+        }
 
         //~~~~~~~~ Stop uncommenting from here for the ball ~~~~~~~~~~~
 
@@ -339,27 +340,28 @@ public class ColorControl : MonoBehaviour
 
     //~~~~~~~~ Start uncommenting from here for the ball ~~~~~~~~~~~
 
-    //public void SendAngle()
-    //{
-    //    sp.WriteLine("A " + changeAngle);
+    public void SendAngle()
+    {
+        sp.WriteLine("A " + changeAngle);
 
-    //    try
-    //    {
-    //        approve = sp.ReadLine();
-    //    }
-    //    catch (System.TimeoutException e)
-    //    { }
+        try
+        {
+            approve = sp.ReadLine();
+        }
+        catch (System.TimeoutException e)
+        { }
 
-    //    sp.BaseStream.Flush();
+        sp.BaseStream.Flush();
 
-    //}
+    }
 
     //~~~~~~~~ Stop uncommenting from here for the ball ~~~~~~~~~~~
 
 
     private void OnApplicationQuit()
     {
-        //sp.Close(); //~~~~~~~~ Uncomment this line for the ball ~~~~~~~~~~~
+        if(sp.IsOpen)
+            sp.Close(); //~~~~~~~~ Uncomment this line for the ball ~~~~~~~~~~~
 
     }
 }

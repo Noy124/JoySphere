@@ -81,6 +81,11 @@ public class GameControl : MonoBehaviour
                     }
                     else if (Input.GetKeyDown("E"))
                     {
+
+                        if (Movement.spMovement.IsOpen)
+                            Movement.spMovement.Close();
+                        if (ColorControl.sp.IsOpen)
+                            ColorControl.sp.Close();
                         SceneManager.LoadScene("Main Menu");
                     }
                 }
@@ -228,8 +233,10 @@ public class GameControl : MonoBehaviour
             //Sending names and scores and changing the scene to highscores
             if (Input.GetKey("space"))
             {
-                Movement.spMovement.Close();
-                ColorControl.sp.Close();
+                if(Movement.spMovement.IsOpen)
+                    Movement.spMovement.Close();
+                if(ColorControl.sp.IsOpen)
+                    ColorControl.sp.Close();
 
                 string playerA = GlobalControl.Instance.playerA;
                 string playerB = GlobalControl.Instance.playerB;
@@ -252,8 +259,11 @@ public class GameControl : MonoBehaviour
                 pause = false;
             } else if (Input.GetKey(KeyCode.E))
             {
-                Movement.spMovement.Close();
-                ColorControl.sp.Close();
+
+                if (Movement.spMovement.IsOpen)
+                    Movement.spMovement.Close();
+                if (ColorControl.sp.IsOpen)
+                    ColorControl.sp.Close();
                 //Exits to main menu
                 SceneManager.LoadScene(0);
             }

@@ -5,8 +5,8 @@ using UnityEngine;
 public class GlobalControl : MonoBehaviour
 {
     public static GlobalControl Instance;
-    public string playerA;
-    public string playerB;
+    public string playerA="";
+    public string playerB="";
 
     void Awake()
     {

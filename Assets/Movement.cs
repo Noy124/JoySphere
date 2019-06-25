@@ -35,22 +35,22 @@ public class Movement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         trans = GetComponent<Transform>();
-        
+
         //If you switch bluetooth, this part needs to change to the correct COM and frequency of the new bluetooth
-        //spMovement = new SerialPort("COM7", 38400);
-        
-        //if (!spMovement.IsOpen)
-        //{
-        //    spMovement.Open();
-        //    spMovement.ReadTimeout = 10;
-        //    spMovement.Handshake = Handshake.None;
-        //    //Debug.Log("Opened port");
-        //}
+        spMovement = new SerialPort("COM7", 38400);
+
+        if (!spMovement.IsOpen)
+        {
+            spMovement.Open();
+            spMovement.ReadTimeout = 10;
+            spMovement.Handshake = Handshake.None;
+            //Debug.Log("Opened port");
+        }
 
         ////Because the FPS of unity is much lower than the amount of messages the arduino sends (60FPS vs amount of ticks in a second), a new thread is needed to run the input recieving so we can take care of all inputs in time instead of having a delay of 20 seconds
-        //Thread btThread = new Thread(new ThreadStart(readFromStream));
-        //btThread.IsBackground = true;
-        //btThread.Start();   
+        Thread btThread = new Thread(new ThreadStart(readFromStream));
+        btThread.IsBackground = true;
+        btThread.Start();
 
     }
 
@@ -89,39 +89,39 @@ public class Movement : MonoBehaviour
         dirY = Input.GetAxisRaw("Vertical");
 
         //Once per frame getting the most recent input from arduino and translating it into movement parameters
-        //float pitch, roll;
+        float pitch, roll;
 
-        //string[] msg = data.ToString().Split(' ');
-        //if (spMovement.IsOpen)
-        //{
-           
-        //    try
-        //    {
-        //        roll = System.Convert.ToSingle(msg[1]);
-        //        pitch = System.Convert.ToSingle(msg[2]);
+        string[] msg = data.ToString().Split(' ');
+        if (spMovement.IsOpen)
+        {
+
+            try
+            {
+                roll = System.Convert.ToSingle(msg[1]);
+                pitch = System.Convert.ToSingle(msg[2]);
 
 
-        //        //The direction is calculated relative to the first position
-        //        if (!gotStartingPosition)
-        //        {
-        //            startingPitch = pitch;
-        //            startingRoll = roll;
-        //            gotStartingPosition = true;
-        //        }
+                //The direction is calculated relative to the first position
+                if (!gotStartingPosition)
+                {
+                    startingPitch = pitch;
+                    startingRoll = roll;
+                    gotStartingPosition = true;
+                }
 
-        //        speed = Mathf.Sqrt(Mathf.Pow(roll - startingRoll, 2) + Mathf.Pow(pitch - startingPitch, 2)) * speedScale; //Calculating distance of velocity vector
-        //        dirX = startingPitch - pitch;
-        //        dirY = roll - startingRoll;
-        //        //Debug.Log("dirx: " + dirX + ", dirY: " + dirY + ", speed: " + speed);
+                speed = Mathf.Sqrt(Mathf.Pow(roll - startingRoll, 2) + Mathf.Pow(pitch - startingPitch, 2)) * speedScale; //Calculating distance of velocity vector
+                dirX = startingPitch - pitch;
+                dirY = roll - startingRoll;
+                //Debug.Log("dirx: " + dirX + ", dirY: " + dirY + ", speed: " + speed);
 
-        //    }
-        //    catch (System.FormatException)
-        //    {
+            }
+            catch (System.FormatException)
+            {
 
-        //    }
-        //    catch (System.IndexOutOfRangeException) {  }
-        //}    
-}
+            }
+            catch (System.IndexOutOfRangeException) { }
+        }
+    }
 
 
     private void FixedUpdate()
@@ -158,7 +158,7 @@ public class Movement : MonoBehaviour
     private void OnApplicationQuit()
     {
         //Closing the port
-        //if(spMovement.IsOpen)
-        //    spMovement.Close();
+        if (spMovement.IsOpen)
+            spMovement.Close();
     }
 }
