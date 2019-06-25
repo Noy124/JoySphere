@@ -212,7 +212,7 @@ public class ObstaclePool : MonoBehaviour
             case 4: tempColor = Color.magenta;break;
             case 5: tempColor = Color.cyan;break;
             case 6: tempColor = Color.yellow;break;
-            case 7: tempColor = Color.black; break;
+            case 7: tempColor = Color.white; break;
 
         }
 

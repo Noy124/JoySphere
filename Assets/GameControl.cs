@@ -9,12 +9,27 @@ using UnityEngine.Networking;
 //This class manages the game in general. It controls the life system, the game over and restart, and the pause menu. Any general calculations not related to a specific object should be made here
 public class GameControl : MonoBehaviour
 {
+    [System.Serializable]
+    public class HighScoreLine
+    {
+        public string player_a;
+        public string player_b;
+        public int score;
+
+        public static HighScoreLine CreateFromJSON(string jsonString)
+        {
+            //Debug.Log(jsonString);
+            return JsonUtility.FromJson<HighScoreLine>(jsonString);
+        }
+    }
+
     public static GameControl instance; //Note that this class is a singleton, and this is the single instance. From this you get the rest of the functions
     public GameObject gameOverText, noHearts, oneHeart, twoHearts, threeHearts, fourHearts, fiveHearts, sixHearts, sevenHearts, eightHearts, nineHearts, pauseText, errorText, player;
-    public Text scoreText;
+    public Text scoreText, timeText, rankText, toNextRankText;
     public bool gameOver = false;
     public bool pause = false;
     public static int health = 9;
+    public int totalObstacles = 0, totalCaught=0;
 
     //This is the only thing you may change, changes the scrolling speed of scrolling objects (right now obstacles and hearts)
     public float scrollSpeed = -1.5f;
@@ -22,6 +37,9 @@ public class GameControl : MonoBehaviour
     private float defaultScrollSpeed;
     private int score = 0;
     private float originalSpeed;
+    private HighScoreLine[] hsTable;
+    private float runTime;
+    private int currentRank, scoreToNextRank;
 
     // Start is called before the first frame update
     void Awake()
@@ -38,8 +56,61 @@ public class GameControl : MonoBehaviour
 
         health = 9;
         defaultScrollSpeed = scrollSpeed;
+
+        StartCoroutine(GetRequest("https://joysphere-high-scores.azurewebsites.net/api/GetHighScores?code=wWAwKQYv3wiP2LAFmrW7baBle5Iux66d1Dk8qYZ/xvoG8aHMFJEG7A=="));
+
+       
     }
 
+    IEnumerator GetRequest(string uri)
+    {
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+
+            yield return webRequest.SendWebRequest();
+
+            while (webRequest.isNetworkError)
+            {
+                bool gotInput = false;
+                errorText.SetActive(true);
+                while (!gotInput)
+                {
+                    if (Input.GetKeyDown("R"))
+                    {
+                        gotInput = true;
+                    }
+                    else if (Input.GetKeyDown("E"))
+                    {
+                        SceneManager.LoadScene("Main Menu");
+                    }
+                }
+
+                yield return webRequest.SendWebRequest();
+            }
+
+            DownloadHandler dh = webRequest.downloadHandler;
+            string[] jsonLines = dh.text.Replace("[", "").Replace("]", "").Split(new string[] { "}," }, System.StringSplitOptions.None);
+
+            hsTable = new HighScoreLine[jsonLines.Length];
+            for (int i = 0; i < jsonLines.Length; i++)
+            {
+                if (i < jsonLines.Length - 1)
+                {
+                    hsTable[i] = HighScoreLine.CreateFromJSON(jsonLines[i] + "}");
+                }
+                else
+                {
+                    hsTable[i] = HighScoreLine.CreateFromJSON(jsonLines[i]);
+                }
+                //Debug.Log("Player a: " + hsTable[i].player_a + ", Player b: " + hsTable[i].player_b + ", Score: " + hsTable[i].score);
+            }
+
+        }
+
+        currentRank = hsTable.Length;
+        scoreToNextRank = hsTable[currentRank - 1].score;
+
+    }
     // Update is called once per frame
     void Update()
     {
@@ -114,6 +185,16 @@ public class GameControl : MonoBehaviour
 
             }
 
+            runTime += Time.deltaTime;
+            timeText.GetComponent<Text>().text = "Time: " + (int)runTime;
+            if(score > scoreToNextRank && currentRank>1)
+            {
+                currentRank--;
+                scoreToNextRank = hsTable[currentRank - 1].score;
+            }
+
+            rankText.GetComponent<Text>().text = "Rank: " + currentRank;
+            toNextRankText.GetComponent<Text>().text = "Next Rank: " + scoreToNextRank;
             //Pause menu
             if (Input.GetKey(KeyCode.P))
             {
@@ -147,6 +228,9 @@ public class GameControl : MonoBehaviour
             //Sending names and scores and changing the scene to highscores
             if (Input.GetKey("space"))
             {
+                Movement.spMovement.Close();
+                ColorControl.sp.Close();
+
                 string playerA = GlobalControl.Instance.playerA;
                 string playerB = GlobalControl.Instance.playerB;
                 StartCoroutine(GetRequest("https://joysphere-high-scores.azurewebsites.net/api/InsertScore?code=tBGQNyRYHaDY1JtoG/YkNEaeCg2RT6VjxZsFkRty57l9LoOKQG1CiA==&player_a=" + playerA + "&player_b=" + playerB + "&score=" + score));
@@ -168,6 +252,8 @@ public class GameControl : MonoBehaviour
                 pause = false;
             } else if (Input.GetKey(KeyCode.E))
             {
+                Movement.spMovement.Close();
+                ColorControl.sp.Close();
                 //Exits to main menu
                 SceneManager.LoadScene(0);
             }
@@ -191,32 +277,5 @@ public class GameControl : MonoBehaviour
         scoreText.text = "Score: " + score.ToString();
     }
 
-    IEnumerator GetRequest(string uri)
-    {
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
-        {
-
-            yield return webRequest.SendWebRequest();
-
-            while (webRequest.isNetworkError)
-            {
-                bool gotInput = false;
-                errorText.SetActive(true);
-                while (!gotInput)
-                {
-                    if (Input.GetKeyDown("R"))
-                    {
-                        gotInput = true;
-                    }
-                    else if (Input.GetKeyDown("E")){
-                        SceneManager.LoadScene("Main Menu");
-                    }
-                }
-
-                yield return webRequest.SendWebRequest();
-            }
-
-
-        }
-    }
+    
 }

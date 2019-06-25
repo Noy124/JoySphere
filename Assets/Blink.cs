@@ -21,20 +21,22 @@ public class Blink : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Debug.Log(SceneManager.GetActiveScene() != SceneManager.GetSceneByName("Game"));
+
         if ((SceneManager.GetActiveScene() == SceneManager.GetSceneByName("Game") && !GameControl.instance.pause))
         {
-            {
-                int shouldPlay = Random.Range(0, 500);
-                if (shouldPlay == 1)
-                {
-                    animator.Play("star animation");
-                    //timeSinceBlink = 0;
-                    //float posX = Random.Range(minXPos, maxXPos);
-                    //float posY = Random.Range(minYPos, maxYPos);
 
-                    //this.transform.position = new Vector2(posX, posY);
-                }
+            int shouldPlay = Random.Range(0, 500);
+            if (shouldPlay == 1)
+            {
+                animator.Play("star animation");
+                //timeSinceBlink = 0;
+                //float posX = Random.Range(minXPos, maxXPos);
+                //float posY = Random.Range(minYPos, maxYPos);
+
+                //this.transform.position = new Vector2(posX, posY);
             }
+        }
             if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("Game"))
             {
                 int shouldPlay = Random.Range(0, 200);
@@ -46,4 +48,4 @@ public class Blink : MonoBehaviour
         }
 
     }
-}
+

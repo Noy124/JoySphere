@@ -39,11 +39,14 @@ public class Obstacle : MonoBehaviour
                 {
                     GameControl.instance.Score(2);
                 }
+
+                GameControl.instance.totalCaught++;
+                //Debug.Log("Total caught: " + GameControl.instance.totalCaught);
             }
             else
             {
                 //If the color was wrong, lower difficulty
-                GameControl.health -= 1;
+                //GameControl.health -= 1;
                 ObstaclePool.LowerDifficulty();
             }
 
@@ -59,6 +62,9 @@ public class Obstacle : MonoBehaviour
     {
         GameControl.health -= 1;
         ObstaclePool.LowerDifficulty();
+        GameControl.instance.totalObstacles++;
+        //Debug.Log("Total obstacles: " + GameControl.instance.totalObstacles);
+
     }
 
 

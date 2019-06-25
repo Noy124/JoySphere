@@ -10,11 +10,11 @@ public class ColorControl : MonoBehaviour
     public int changeAngle=30; //The angle it needs to detect in order to count as a color change
     public GameObject body;
     public Sprite black, white, red, green, blue, yellow, magenta, cyan;
+    public static SerialPort sp;
 
-    private Color currentColor = Color.white;
-    private Color nextColor = Color.white;
+    private Color currentColor = Color.black;
+    private Color nextColor = Color.black;
     private SpriteRenderer sr;
-    private SerialPort sp;
     private bool gotNewColor = false;
     //private string approve = null; //~~~~~~~~ Uncommen this line for the ball ~~~~~~~~~~~
 
@@ -23,7 +23,10 @@ public class ColorControl : MonoBehaviour
     void Start()
     {
         sr = GetComponent<SpriteRenderer>();
-
+        currentColor = Color.black;
+        nextColor = Color.black;
+        //Debug.Log("Start current color: " + currentColor);
+        sr.color = Color.black;
         //~~~~~~~~ Start uncommenting from here for the ball ~~~~~~~~~~~
 
         //sp = new SerialPort("COM7", 9600);
@@ -119,6 +122,7 @@ public class ColorControl : MonoBehaviour
         {
            nextColor = Color.blue;
             gotNewColor = true;
+            //Debug.Log("Blue curren color: " + currentColor);
         }
         else if (Input.GetKey("2"))
         {
@@ -132,7 +136,7 @@ public class ColorControl : MonoBehaviour
         }
         else if(Input.GetKey("4"))
         {
-           nextColor = Color.white;
+           nextColor = Color.black;
             gotNewColor = true;
         }
         //~~~~~~~~ Stop uncommenting from here to disable keyboard input ~~~~~~~~~~~
@@ -141,8 +145,9 @@ public class ColorControl : MonoBehaviour
         //From here on calculates the new player color
         if (gotNewColor && !GameControl.instance.gameOver && !GameControl.instance.pause)
         {
+            //Debug.Log("Current color: " + currentkColor);
             gotNewColor = false;
-            if (sr.color == Color.white)
+            if (sr.color == Color.black)
             {
                 currentColor = nextColor;
             }
@@ -155,8 +160,8 @@ public class ColorControl : MonoBehaviour
                 if (nextColor == Color.red)
                     currentColor = Color.magenta;
 
-                if (nextColor == Color.white)
-                    currentColor = Color.white;
+                if (nextColor == Color.black)
+                    currentColor = Color.black;
 
                 if (nextColor == Color.blue)
                     currentColor = Color.blue;
@@ -172,8 +177,8 @@ public class ColorControl : MonoBehaviour
                 if (nextColor == Color.red)
                     currentColor = Color.red;
 
-                if (nextColor == Color.white)
-                    currentColor = Color.white;
+                if (nextColor == Color.black)
+                    currentColor = Color.black;
 
                 if (nextColor == Color.blue)
                     currentColor = Color.magenta;
@@ -188,8 +193,8 @@ public class ColorControl : MonoBehaviour
                 if (nextColor == Color.red)
                     currentColor = Color.yellow;
 
-                if (nextColor == Color.white)
-                    currentColor = Color.white;
+                if (nextColor == Color.black)
+                    currentColor = Color.black;
 
                 if (nextColor == Color.blue)
                     currentColor = Color.cyan;
@@ -199,13 +204,13 @@ public class ColorControl : MonoBehaviour
             {
 
                 if (nextColor == Color.green)
-                    currentColor = Color.black;
+                    currentColor = Color.white;
 
                 if (nextColor == Color.red)
                     currentColor = Color.magenta;
 
-                if (nextColor == Color.white)
-                    currentColor = Color.white;
+                if (nextColor == Color.black)
+                    currentColor = Color.black;
 
                 if (nextColor == Color.blue)
                     currentColor = Color.magenta;
@@ -220,27 +225,27 @@ public class ColorControl : MonoBehaviour
                 if (nextColor == Color.red)
                     currentColor = Color.yellow;
 
-                if (nextColor == Color.white)
-                    currentColor = Color.white;
+                if (nextColor == Color.black)
+                    currentColor = Color.black;
 
                 if (nextColor == Color.blue)
-                    currentColor = Color.black;
+                    currentColor = Color.white;
             }
 
-            else if (sr.color == Color.black)
+            else if (sr.color == Color.white)
             {
 
                 if (nextColor == Color.green)
-                    currentColor = Color.black;
-
-                if (nextColor == Color.red)
-                    currentColor = Color.black;
-
-                if (nextColor == Color.white)
                     currentColor = Color.white;
 
-                if (nextColor == Color.blue)
+                if (nextColor == Color.red)
+                    currentColor = Color.white;
+
+                if (nextColor == Color.black)
                     currentColor = Color.black;
+
+                if (nextColor == Color.blue)
+                    currentColor = Color.white;
             }
 
             else if (sr.color == Color.cyan)
@@ -250,10 +255,10 @@ public class ColorControl : MonoBehaviour
                     currentColor = Color.cyan;
 
                 if (nextColor == Color.red)
-                    currentColor = Color.black;
-
-                if (nextColor == Color.white)
                     currentColor = Color.white;
+
+                if (nextColor == Color.black)
+                    currentColor = Color.black;
 
                 if (nextColor == Color.blue)
                     currentColor = Color.cyan;
@@ -264,7 +269,7 @@ public class ColorControl : MonoBehaviour
 
             SpriteRenderer bsr = body.GetComponent<SpriteRenderer>();
 
-            if (currentColor == Color.white)
+            if (currentColor == Color.black)
             {
                 bsr.sprite = black;
             }
@@ -286,7 +291,7 @@ public class ColorControl : MonoBehaviour
             if (currentColor == Color.green)
                 bsr.sprite = green;
 
-            if (currentColor == Color.black)
+            if (currentColor == Color.white)
                 bsr.sprite = white;
 
             if (currentColor == Color.cyan)
@@ -306,9 +311,9 @@ public class ColorControl : MonoBehaviour
     public void ResetColor()
     {
        
-        currentColor = Color.white;
-        nextColor = Color.white;
-        sr.color = Color.white;
+        currentColor = Color.black;
+        nextColor = Color.black;
+        sr.color = Color.black;
         body.GetComponent<SpriteRenderer>().sprite = black;
         gotNewColor = false;
     }
